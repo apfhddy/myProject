@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="page">
+	<!-- SQL문들을 작성하는 파일 -->
+	<select id="getList" resultType="page.Page_DTO" parameterType="int">
+		select * from page where parent = #{k} order by orderno
+	</select>
+	
+	<select id="getPage" parameterType="int" resultType="map">
+		select * from page where page_no = #{k}
+	</select>
+	
+	<update id="savePage" parameterType="map">
+		update page set data = #{data},
+		title = #{title,jdbcType=VARCHAR}
+		where page_no = #{no}
+	</update>
+	
+	<select id="nextSeq" resultType="int">
+		select page_seq.nextval from dual
+	</select>
+	
+	<insert id="addPage" parameterType="page.Page_DTO">
+		insert into page values(#{page_no},null,#{data},#{parent},#{orderno})
+	</insert>
+	
+	<select id="nextOrderNo" resultType="int" parameterType="int">
+		select nvl(max(orderno),0) from page where parent = #{k}
+	</select>
+	
+	<delete id="deletePage" parameterType="int">
+		delete page where page_no = #{k}
+	</delete>
+	
+	<update id="childrenAdd" parameterType="map">
+		update page set data  = (select data from page where page_no = #{no}) || #{data} where page_no = #{no}
+	</update>
+	
+	<update id="updateOrder" parameterType="map">
+		update page set orderno = #{order} where page_no = #{no}
+	</update>
+	
+	<update id="updateParent" parameterType="map">
+		update page set parent = #{parent} where page_no = #{no}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
