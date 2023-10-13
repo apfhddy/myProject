@@ -17,7 +17,7 @@
 				<tr>
 					<th>비밀번호</th>
 					<td><input type = "password" name = "pw"></td>
-				</tr>
+				</tr> 
 			</table>
 			<input type = "button" value="로그인" onclick="let id = this.form.id.value; let pw = this.form.pw.value;   if(id == '' || pw == '' ){alert('나가라')}else{this.form.submit()}     ">
 		</form>		
