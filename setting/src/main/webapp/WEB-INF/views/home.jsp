@@ -352,6 +352,8 @@
 <script src="resources/js/pictureEditor.js?ver=222113"></script>
 <script src="resources/js/contentEditor.js?ver=21121"></script>
 <script type="text/javascript">
+	
+	
 	let targetpg = null; //플러스 설정 버튼을 설정한 마지막 dom을 가져오기 위한 변수
 	let now = null; //페이지 리스트에 내페이지가 없으면 null
 	let file = document.querySelector('input[type = "file"]');

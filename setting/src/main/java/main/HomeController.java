@@ -1,28 +1,21 @@
 package main;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Clob;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import email.MailSendService;
@@ -33,7 +26,7 @@ import page.Page_Service;
  * Handles requests for the application home page.
  */
 @Controller
-public class HomeController {
+public class HomeController extends Thread {
 	
 	@Autowired
 	private ServletContext application;
@@ -41,9 +34,8 @@ public class HomeController {
 	private Page_Service page_service;
 	private MailSendService mailSendService;
 	
-	
 	public HomeController(Page_Service page_service, MailSendService mailSendService,String id) {
-		System.out.println("홈컨트롤러 작동"+id);
+		System.out.println("홈컨트롤러 작동");
 		this.page_service = page_service;
 		this.mailSendService = mailSendService;
 	}
@@ -54,15 +46,16 @@ public class HomeController {
 	
 	@RequestMapping("/")
 	public String indexPage(HttpSession session) {
-		session.setAttribute("password", mailSendService.joinEmail(null));
 		return "/WEB-INF/views/login.jsp";
 	}
 	
 	
 	@RequestMapping("login")
 	public String home(String id ,String pw,HttpServletRequest req) {
-
 		if(req.getSession() != null && req.getSession().getAttribute("password") != null && id.equals("wjdgmlfkr") && req.getSession().getAttribute("password").equals(pw)) {
+			List<Page_DTO> list = page_service.getList(0);
+			req.setAttribute("list", list);
+			req.getSession().setAttribute("login", 1);
 			return "/WEB-INF/views/home.jsp";
 		}else {
 			return "redirect:https://www.google.com/";
@@ -163,4 +156,13 @@ public class HomeController {
 		page_service.updateParent(k,kk);		
 	}
 	
+	@RequestMapping("Start")
+	@ResponseBody
+	public void Start(HttpSession session) {
+		if(session.getAttribute("start") == null) {
+			session.setAttribute("start", 1);
+			session.setAttribute("password", mailSendService.joinEmail(null));
+			session.removeAttribute("start");
+		}
+	}
 }

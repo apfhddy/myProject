@@ -14,7 +14,7 @@ public class MailSendService {
     	this.mailSender = gmlfkrd;
     }
     
-    public MailSendService() {}
+    public MailSendService() {} 
     
     private String getKey(int size) {
 		String key = "";
