@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import email.MailSendService;
 import page.Page_DTO;
 import page.Page_Service;
 
@@ -37,13 +39,13 @@ public class HomeController {
 	private ServletContext application;
 	
 	private Page_Service page_service;
+	private MailSendService mailSendService;
 	
 	
-	
-	
-	public HomeController(Page_Service page_service) {
+	public HomeController(Page_Service page_service, MailSendService mailSendService) {
 		System.out.println("홈컨트롤러 작동");
 		this.page_service = page_service;
+		this.mailSendService = mailSendService;
 	}
 	
 	/** 
@@ -51,22 +53,19 @@ public class HomeController {
 	 */
 	
 	@RequestMapping("/")
-	public String indexPage() {
-		
+	public String indexPage(HttpSession session) {
+		session.setAttribute("password", mailSendService.joinEmail(null));
 		return "/WEB-INF/views/login.jsp";
 	}
 	
 	
 	@RequestMapping("login")
 	public String home(String id ,String pw,HttpServletRequest req) {
-		if(id.equals("wjdgmlfkr") && pw.equals("112233")) {
-			List<Page_DTO> list = page_service.getList(0);
-			
-			req.getSession().setAttribute("login",1);
-			req.setAttribute("list", list);
-			return "/WEB-INF/views/home.jsp";			
+
+		if(req.getSession() != null && req.getSession().getAttribute("password") != null && id.equals("wjdgmlfkr") && req.getSession().getAttribute("password").equals(pw)) {
+			return "/WEB-INF/views/home.jsp";
 		}else {
-			return "/";
+			return "redirect:https://www.google.com/";
 		}
 	}
 
