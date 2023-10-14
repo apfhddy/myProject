@@ -1036,7 +1036,16 @@
 	
 	
 	
-	
+	function code(code) {
+		$.ajax({
+			url:"${pageContext.request.contextPath}/codeRuntime";
+			data:{code : code},
+			type:"POST",
+			success: function sc(s) {
+				console.log(s);
+			}
+		})
+	}
 	
 	
 	

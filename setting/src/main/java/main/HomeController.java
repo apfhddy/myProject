@@ -15,9 +15,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+import compiler.Compiler;
 import email.MailSendService;
 import page.Page_DTO;
 import page.Page_Service;
@@ -33,6 +33,7 @@ public class HomeController extends Thread {
 	
 	private Page_Service page_service;
 	private MailSendService mailSendService;
+	private Compiler codeRuntime = new Compiler();
 	
 	public HomeController(Page_Service page_service, MailSendService mailSendService,String id) {
 		System.out.println("홈컨트롤러 작동");
@@ -165,4 +166,12 @@ public class HomeController extends Thread {
 			session.removeAttribute("start");
 		}
 	}
+	
+	
+	@RequestMapping("codeRuntime")
+	@ResponseBody
+	public String codeRuntime(String code) {
+		return codeRuntime.Compile(code);
+	}
+	
 }
