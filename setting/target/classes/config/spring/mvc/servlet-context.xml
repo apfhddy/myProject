@@ -24,6 +24,7 @@
 	<beans:bean class="main.HomeController">
 		<beans:constructor-arg ref = "page_service"/>
 		<beans:constructor-arg ref = "mailSendService"/>
+		<beans:constructor-arg ref = "id"/>
 	</beans:bean>	
 		<context:annotation-config/>
 <!-- 	<beans:bean class="controller.DeptController">

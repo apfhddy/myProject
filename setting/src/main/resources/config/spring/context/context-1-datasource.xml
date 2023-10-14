@@ -13,7 +13,12 @@
 		DataSource 객체를 생성하기위해서는 jar파일 추가를 해야 한다...
 		- Commons DBCP
 	 -->
-	
+	<bean id = "id" class="java.lang.String">
+		<constructor-arg value="${id}"/>
+	</bean>
+	<bean id = "pw" class="java.lang.String">
+		<constructor-arg value="${pw}"/>
+	</bean>
 	<bean id="ds" class="org.apache.commons.dbcp2.BasicDataSource">
 		<property name="driverClassName" value="${driver}"/>
 		<property name="url" value="${url}"/>

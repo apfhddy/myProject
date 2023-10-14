@@ -42,8 +42,8 @@ public class HomeController {
 	private MailSendService mailSendService;
 	
 	
-	public HomeController(Page_Service page_service, MailSendService mailSendService) {
-		System.out.println("홈컨트롤러 작동");
+	public HomeController(Page_Service page_service, MailSendService mailSendService,String id) {
+		System.out.println("홈컨트롤러 작동"+id);
 		this.page_service = page_service;
 		this.mailSendService = mailSendService;
 	}
