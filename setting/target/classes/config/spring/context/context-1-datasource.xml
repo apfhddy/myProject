@@ -7,7 +7,7 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- db.properties 파일 불러오기... -->
-	<context:property-placeholder location="classpath:config/mybatis/db.properties"/>	
+	<context:property-placeholder location="classpath:config/mybatis/db.properties , classpath:config/mybatis/mail.properties"/>	
 	
 	<!-- 
 		DataSource 객체를 생성하기위해서는 jar파일 추가를 해야 한다...
