@@ -66,7 +66,7 @@ public class Page_Service {
 		String[] date = sdf.format(parseDate).split(",");
 		String[] arr = date[0].split("-");
 		
-		String path = "C:\\Users\\vavog\\Desktop\\serverFile\\"+map.get("no")+"\\"+arr[0]+"\\"+arr[1]+"\\"+arr[2]+"\\"+arr[3];
+		String path = "C:\\Users\\vavog\\Desktop\\serverFile\\userFile\\"+map.get("no")+"\\"+arr[0]+"\\"+arr[1]+"\\"+arr[2]+"\\"+arr[3];
 		
 		File file = new File(path);
 		if(!file.exists()) {
