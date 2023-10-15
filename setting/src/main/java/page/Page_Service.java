@@ -52,7 +52,6 @@ public class Page_Service {
 		Clob c = (Clob)map.get("DATA");
 		
 		String data = WhatToWhat.clobToString(c);
-		
 	
 		map.put("DATA", data);
 		

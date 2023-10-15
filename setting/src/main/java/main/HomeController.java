@@ -47,6 +47,7 @@ public class HomeController extends Thread {
 	
 	@RequestMapping("/")
 	public String indexPage(HttpSession session) {
+		session.setAttribute("id",session.getId());
 		return "/WEB-INF/views/login.jsp";
 	}
 	
