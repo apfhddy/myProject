@@ -377,7 +377,7 @@
 				<input type = "text" name = "variable">
 			</div>	
 			<div>
-				<div><textarea id = "cs" rows="10"  cols="60" style="font-weight: bold;"></textarea><input type= "button" value = "실행" onclick="codeRun(this)"></div>
+				<div><textarea cols="40" rows="20"></textarea><input type= "button" value = "실행" onclick="codeRun(this)"></div>
 			</div>
 		</div>
 	</div>
@@ -386,6 +386,27 @@
 <script src="resources/js/pictureEditor.js?ver=222113"></script>
 <script src="resources/js/contentEditor.js?ver=21121"></script>
 <script type="text/javascript">
+	let sock = new SockJS("http://${pageContext.request.serverName }:${pageContext.request.serverPort }${pageContext.request.contextPath }/echo");
+	function sendMessage() {
+	    sock.send($("#message").val());
+	    $('#message').val('')
+	}
+	
+	function on() {
+		sendMessage();			
+	}
+	
+	
+	
+	
+	sock.onmessage = function(e){
+		$("#chat").append(e.data + "<br/>");
+	}
+	
+	sock.onclose = function(){
+		$("#chat").append("연결 종료");
+	}
+		
 	
 	
 	let targetpg = null; //플러스 설정 버튼을 설정한 마지막 dom을 가져오기 위한 변수
