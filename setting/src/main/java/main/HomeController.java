@@ -21,6 +21,7 @@ import compiler.Compiler;
 import email.MailSendService;
 import page.Page_DTO;
 import page.Page_Service;
+import websocket.Socket;
 
 /**
  * Handles requests for the application home page.
@@ -34,11 +35,13 @@ public class HomeController extends Thread {
 	private Page_Service page_service;
 	private MailSendService mailSendService;
 	private Compiler codeRuntime = new Compiler();
+	private Socket echoHandler;
 	
-	public HomeController(Page_Service page_service, MailSendService mailSendService,String id) {
+	public HomeController(Page_Service page_service, MailSendService mailSendService,Socket echoHandler) {
 		System.out.println("홈컨트롤러 작동");
 		this.page_service = page_service;
 		this.mailSendService = mailSendService;
+		this.echoHandler = echoHandler;
 	}
 	
 	/** 
@@ -93,7 +96,8 @@ public class HomeController extends Thread {
 	
 	@RequestMapping("getPage")
 	@ResponseBody
-	public Map<String,Object> getPage(int k) {
+	public Map<String,Object> getPage(HttpSession sessoin,int k) {
+		// 페이지 준비
 		Map<String,Object> data = page_service.getPage(k); 
 		
 		List<Page_DTO> list = page_service.getList(k);
@@ -102,10 +106,13 @@ public class HomeController extends Thread {
 			childList.put(page.getPage_no(), page.getTitle());
 		}
 		
-		
 		Map<String,Object> result = new HashMap<>();
 		result.put("data", data);
 		result.put("child", childList);
+		//페이지 준비
+		//websocket 준비
+		echoHandler.getSessionMap(sessoin.getId()).put("page", k);
+		
 		return result;
 	}
 	

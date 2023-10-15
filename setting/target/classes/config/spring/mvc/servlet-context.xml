@@ -23,22 +23,23 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean> -->
 	
+		<context:annotation-config/>
+	
+	<websocket:handlers>
+    	<websocket:mapping handler="echoHandler" path="/echo"/>
+		<websocket:handshake-interceptors>
+			<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"></beans:bean>
+		</websocket:handshake-interceptors>
+		<websocket:sockjs />
+    </websocket:handlers>
+       
+    <beans:bean id="echoHandler" class="websocket.Socket" />
+	
 	<beans:bean class="main.HomeController">
 		<beans:constructor-arg ref = "page_service"/>
 		<beans:constructor-arg ref = "mailSendService"/>
-		<beans:constructor-arg ref = "id"/>
+		<beans:constructor-arg ref = "echoHandler"/>
 	</beans:bean>	
-		<context:annotation-config/>
-	
-		<websocket:handlers>
-               <websocket:mapping handler="echoHandler" path="/echo"/>
-					<websocket:handshake-interceptors>
-							<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"></beans:bean>
-					</websocket:handshake-interceptors>
-               <websocket:sockjs />
-        </websocket:handlers>
-        
-        <beans:bean id="echoHandler" class="websocket.Socket" />
 	
 	
 </beans:beans>
