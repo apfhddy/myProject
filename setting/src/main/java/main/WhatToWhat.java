@@ -28,16 +28,17 @@ public class WhatToWhat{
 		return "<div><div id=\""+no+"\" class=\"pagesCd\" contenteditable=\"false\" style=\"display: flex;\"><div><img width=\"20\" class=\"pageimg\" src=\"resources/tag/document.png\"></div><div></div></div></div>";
 	}
 	
-	public static List<Integer> JSONArrayToJAVAList(String JSONstringify){
-		List<Integer> list = new ArrayList<>();
+	public static Object JSONArrayToJAVAList(String JSONstringify){
+		List<Object> list = new ArrayList<>();
 		JSONstringify = JSONstringify.substring(2).substring(0,JSONstringify.length()-4);
 		String[] data = JSONstringify.split("\",\"");
     	for(String dt : data) {
-    		list.add(Integer.parseInt(dt));
+    		list.add(dt);
     	}
 		
 		return list;
 	}
+
 	
 	
 }

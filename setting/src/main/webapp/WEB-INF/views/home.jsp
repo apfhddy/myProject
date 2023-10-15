@@ -6,9 +6,9 @@
 <html>
 <head>
 <style type="text/css">
-	div:empty:before {
+/* 	div:empty:before {
    		content: attr(placeholder);
-	}
+	} */
 	body{
 		width:100%; 
 		height:100%; 
@@ -18,6 +18,29 @@
 		position:relative;
 	}
 	html {width:100%; height:100%; margin:0; padding:0; overflow:hidden;} /* 기본 스크롤 제거 */
+	.codeConsole{
+		position: absolute;
+		bottom: 0;
+		right: 0; 
+		margin: 2%;
+		border: 1px solid gray;
+		border-radius: 6px;
+		padding-bottom: 1%; 
+		box-shadow: 1px 1px gray;
+		width: 24%;
+		background-color: white;
+		height: 200;
+		overflow-y: scroll;
+	}
+	.codeConsole > .header{
+		margin-bottom: 5%; 
+		background-color: blue;
+		color: white;  
+	}
+	.codeConsole > .content{
+		width: 90%;
+		
+	}
 	#editor{
 		  position: absolute;
           top: 0; 
@@ -236,6 +259,11 @@
 <body>
 <!-- 에디터 및 설정 박스 -->
 <div class="noSelection">
+	<!--  <div class = "codeConsole">
+		<div class = "header" align="left">[Response]</div> 
+		<div class = "content">fdassdafdsafdsafdasfdsafdsafsadfdsafdasfdsafdasdsafds&nbsp;afsfsdafasdf
+		<br>&ensp;&ensp;&ensp;^</div> 
+	</div>   -->
 	<input style="display: none" class="editor-box" type = "file" accept="image/gif,image/jpeg,image/png">
 	<div id = "editor" style="display:  none;">
 		<div class="editor-box" style="font-weight: bold;" onclick="sc('bold')">B</div>
@@ -342,10 +370,16 @@
 			<input id = "sb" placeholder="제목 없음" maxlength="1000" onkeydown="test(this)" spellcheck = "false">
 		</div>
 		<div draggable="false" id = "content" spellcheck="false" contentEditable="true">
-			<div class="first" placeholder = "안녕하시기" style="position: absolute;">
-				<br>
+			<div>
+				<div><input type = "text" name = "variable"></div>
 			</div>	
-	</div>
+			<div>
+				<input type = "text" name = "variable">
+			</div>	
+			<div>
+				<div><textarea id = "cs" rows="10"  cols="60" style="font-weight: bold;"></textarea><input type= "button" value = "실행" onclick="codeRun(this)"></div>
+			</div>
+		</div>
 	</div>
 </div>
 <script src="resources/js/content.js?ver=132"></script>
@@ -370,8 +404,6 @@
 		setting(i);
 	}) 
 	
-
-	
 	
 	
 	function setting(pg) {//여기서 이미지 드래그 막음
@@ -384,7 +416,7 @@
 	function pageHover(pg) {//이런식인건 자동으로 이벤트 추가할려는것
 		if(Array.isArray(pg)){
 			pg.forEach( ar => {
-				pageH(ar);
+				pageH(ar); 
 			})
 		}else{
 			pageH(pg);
@@ -775,18 +807,19 @@
 	
 	
 	
-	
-
-	
   	
   	
 	document.addEventListener("keydown", function(e) { //키 이벤트 변조
-		if(e.ctrlKey && e.keyCode === 83){// cnt s 저장
+		let code = e.keyCode;
+		
+		/* if(code == 123){
+			e.preventDefault();
+		} */ 
+		if(e.ctrlKey && code === 83){// cnt s 저장
 			e.preventDefault();
 			savePage();
 		}
 		if(content.contains(e.target)){
-			let code = e.keyCode;
 				
 			if(code == 8){//지우기
 				let target = parentFind(nowSelection.anchorNode);
@@ -817,12 +850,31 @@
 					}
 				}
 			}
-			if(code == 9){//탭
+			if(code == 9 ){//탭
 				e.preventDefault();
-				var nbspNode = document.createTextNode("\u2003\u2003");
-				nowSelection.getRangeAt(0).insertNode(nbspNode)
-				nowSelection.getRangeAt(0).setStartAfter(nbspNode)
-				nowSelection.getRangeAt(0).setEndAfter(nbspNode)
+					let nbspNode = document.createTextNode("\u2003\u2003");
+				if(e.target.nodeName == "TEXTAREA" || e.target.nodeName == "INPUT"){
+					   var textarea = cs;
+				        var start = textarea.selectionStart;
+				        var end = textarea.selectionEnd;
+
+				        // You can insert a tab character or any other text as needed
+				        var tabCharacter = '    '; // Use '\t' for a tab character
+				        var textToInsert = tabCharacter;
+
+				        // Insert the text at the current cursor position
+				        var textBefore = textarea.value.substring(0, start);
+				        var textAfter = textarea.value.substring(end);
+				        textarea.value = textBefore + textToInsert + textAfter;
+
+				        // Move the cursor to the appropriate position
+				        textarea.selectionStart = start + textToInsert.length;
+				        textarea.selectionEnd = start + textToInsert.length;
+				}else{
+					nowSelection.getRangeAt(0).insertNode(nbspNode)
+					nowSelection.getRangeAt(0).setStartAfter(nbspNode)
+					nowSelection.getRangeAt(0).setEndAfter(nbspNode)
+				}
 			}
 		}
 	})
@@ -1036,18 +1088,32 @@
 	
 	
 	
-	function code(code) {
+	function codeRun(t) {
+		let code = t.parentElement.children[0].value;
+		let variable = Array.from(content.querySelectorAll("input[name='variable']"));
+		let arr = [];
+		variable.forEach( f => {
+			arr.push(f.value);
+		})
 		$.ajax({
-			url:"${pageContext.request.contextPath}/codeRuntime";
-			data:{code : code},
+			url:"${pageContext.request.contextPath}/codeRuntime",
+			data:{JSONarr:JSON.stringify(arr) ,code : code},
 			type:"POST",
 			success: function sc(s) {
-				console.log(s);
+				if(s != ""){
+					let newDiv = document.createElement("div");
+					newDiv.setAttribute("class","codeConsole");
+					newDiv.innerHTML = '<div class = "header" align="left">[Response]</div> <div class = "content"></div>';
+					newDiv.children[1].innerHTML = '<font style = "color: '+(s['err'] ? 'red' : 'green')+'">'+s['content']+'</font>'
+					document.body.appendChild(newDiv);
+					console.log(s['content']);
+					setTimeout(function() {
+						document.body.removeChild(newDiv);
+					},10000);
+				}
 			}
-		})
+		}) 
 	}
-	
-	
 	
 	
 	
@@ -1158,8 +1224,8 @@
 		}
   		
 	//처음 접속하면 바로 상위 메모장 여는 명령어
-	if(page.children[0] != null)
-		page.children[0].children[0].children[0].children[2].click();   
+	//if(page.children[0] != null)
+		//page.children[0].children[0].children[0].children[2].click();   
   	
 	
 </script> 

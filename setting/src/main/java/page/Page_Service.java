@@ -138,7 +138,7 @@ public class Page_Service {
 	}
 	
 	public void updateOrder(String data) {
-		List<Integer> list = WhatToWhat.JSONArrayToJAVAList(data);
+		List<Integer> list = (List<Integer>)WhatToWhat.JSONArrayToJAVAList(data);
 		for(int i = 0; i < list.size(); i++) {
 			Map<String,Object> map = new HashMap<String, Object>();
 			map.put("order", i+1);

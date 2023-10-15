@@ -168,10 +168,21 @@ public class HomeController extends Thread {
 	}
 	
 	
-	@RequestMapping("codeRuntime")
+	@RequestMapping(value = "codeRuntime")
 	@ResponseBody
-	public String codeRuntime(String code) {
-		return codeRuntime.Compile(code);
+	public Map<String,Object> codeRuntime(String JSONarr,String code) {
+		Map<String,Object> map = null;
+			
+		List<String> list =  (List<String>)WhatToWhat.JSONArrayToJAVAList(JSONarr);
+		String request = "";
+		if(!list.isEmpty())
+			for(String variable : list) {
+				request+=variable+"\n";
+			}
+		request+=code;
+		if(!request.isEmpty())
+			map = codeRuntime.Compile(request);
+		return map;
 	}
 	
 }

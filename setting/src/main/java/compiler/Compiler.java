@@ -1,6 +1,5 @@
 package compiler;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,27 +7,39 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Compiler {
+	private List<String> importList = new ArrayList<String>();
 	
-	public String Compile(String code) {
+	public Compiler() {
+		importList.add("import java.util.List;");
+		importList.add("import java.util.ArrayList;");
+	}
+	
+	
+	public Map<String,Object> Compile(String code) {
 		File compiler = new File("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compil.java");
-		File err = new File("C:\\Users\\vavog\\Desktop\\err.txt");
 		FileOutputStream fos = null;
-		FileOutputStream errfos = null;
-		BufferedInputStream bus = new BufferedInputStream(System.in);
+		boolean err = false;
+		Map<String,Object> map = new HashMap<String, Object>();
 		
-		
-		String args = "public class compil {\r\n"
-				+ "    public static void main(String[] args) {\r\n"
-				+ "        "+code+"\r\n"
-				+ "        System.out.println(s);\r\n"
-				+ "    }\r\n"
-				+ "}";
-		
+		String args = "";
+		for(String ipL : importList) {
+			args+= ipL+"\n";
+		}
+	
+		args +=	"\npublic class compil {\r\n"
+		+ "    public static void main(String[] args) {\r\n"	
+		+ "        "+code.replaceAll("\\\\\"", "\"")+"\r\n"
+		+ "    }\r\n"
+		+ "}";
+	
 		try {
 			fos = new FileOutputStream(compiler);
-			errfos = new FileOutputStream(err);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -40,14 +51,45 @@ public class Compiler {
 			e.printStackTrace();
 		}
 		
-		String line = null;
+		Process prs = null;
+		String line = "";
 		try {
-			Process prs = Runtime.getRuntime().exec("java -Dfile.encoding=UTF-8 C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compil.java");
+			prs = Runtime.getRuntime().exec("java -Dfile.encoding=UTF-8 C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compil.java");
 			BufferedReader bis = new BufferedReader(new InputStreamReader(prs.getInputStream(),Charset.forName("UTF-8")));
-			line = bis.readLine();
+			String buffer = null;
+			while((buffer = bis.readLine()) != null) {
+				line += buffer+"\n";
+			}
+			if(line.isEmpty())
+				line = null;
 		} catch (IOException e) {
 			e.printStackTrace();
+		} 
+		if(line == null) {
+			line = "";
+			BufferedReader bis = new BufferedReader(new InputStreamReader(prs.getErrorStream(),Charset.forName("UTF-8")));
+			try {
+				String buffer = null;
+				while((buffer = bis.readLine()) != null) {
+					if(buffer.contains("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compil.java:")) {
+						buffer = buffer.replace("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compil.java:", "");
+						int lineNum = Integer.parseInt(buffer.charAt(0)+"");
+						buffer = buffer.substring(1);
+						String mesage = "에러라인 :"+(lineNum-2);
+						buffer  = mesage+buffer;
+						err = true;
+					}
+					line += buffer+"\n";
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		return line;
+		line = line.replaceAll("\n", "<br>");
+		line = line.replaceAll(" ", "&nbsp;");
+		map.put("content", line);
+		map.put("err", err);
+		
+		return map;
 	}
 }
