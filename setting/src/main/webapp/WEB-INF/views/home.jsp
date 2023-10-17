@@ -893,22 +893,19 @@
 				e.preventDefault();
 					let nbspNode = document.createTextNode("\u2003\u2003");
 				if(e.target.nodeName == "TEXTAREA" || e.target.nodeName == "INPUT"){
-					   var textarea = cs;
-				        var start = textarea.selectionStart;
-				        var end = textarea.selectionEnd;
+					   let textarea = cs;
+					   let start = textarea.selectionStart;
+					   let end = textarea.selectionEnd;
 
-				        // You can insert a tab character or any other text as needed
-				        var tabCharacter = '    '; // Use '\t' for a tab character
-				        var textToInsert = tabCharacter;
+					   let tabCharacter = '    ';
+					   let textToInsert = tabCharacter;
 
-				        // Insert the text at the current cursor position
-				        var textBefore = textarea.value.substring(0, start);
-				        var textAfter = textarea.value.substring(end);
-				        textarea.value = textBefore + textToInsert + textAfter;
+					   let textBefore = textarea.value.substring(0, start);
+					   let textAfter = textarea.value.substring(end);
+				       textarea.value = textBefore + textToInsert + textAfter;
 
-				        // Move the cursor to the appropriate position
-				        textarea.selectionStart = start + textToInsert.length;
-				        textarea.selectionEnd = start + textToInsert.length;
+				       textarea.selectionStart = start + textToInsert.length;
+				       textarea.selectionEnd = start + textToInsert.length;
 				}else{
 					nowSelection.getRangeAt(0).insertNode(nbspNode)
 					nowSelection.getRangeAt(0).setStartAfter(nbspNode)
