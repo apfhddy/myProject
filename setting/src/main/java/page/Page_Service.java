@@ -148,7 +148,7 @@ public class Page_Service {
 		}
 	}
 	
-	public void updateParent(int no,int parent) {//저 매개변수 parent는 바꿀부모
+	public void updateParent(int no,int parent,int append) {//저 매개변수 parent는 바꿀부모
 		Map<String,Object> map = getPage(no);
 		int parentNo = Integer.parseInt(String.valueOf(map.get("PARENT")));//현재 부모
 		if(parentNo != 0)
@@ -159,6 +159,11 @@ public class Page_Service {
 		map2.put("no", no);
 		map2.put("parent", parent);
 		page_dao.updateParent(map2);
+		if(append != 0) {
+			int orderno = page_dao.nextOrderNo(parent)+1;
+			map2.put("order", orderno);
+			page_dao.updateOrder(map2);
+		}
 	}
 
 	

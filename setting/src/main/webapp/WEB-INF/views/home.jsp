@@ -117,7 +117,7 @@
 		border-right: 1pt solid #E2E2E1;
 		text-align: center;
 		margin: 0;
-		font-size: 13px;
+		font-size: 14px;
 		cursor: pointer;
 	}
 	
@@ -371,14 +371,15 @@
 			<input id = "sb" placeholder="제목 없음" maxlength="1000" onkeydown="test(this)" spellcheck = "false">
 		</div>
 		<div draggable="false" id = "content" spellcheck="false" contentEditable="true">
-			<div>
+			<!-- <div>
 				<div><input type = "text" name = "variable"></div>
 			</div>	
 			<div>
 				<input type = "text" name = "variable">
-			</div>	
+			</div>	 -->
+			<div><br></div>
 			<div>
-				<div><textarea cols="40" rows="20"></textarea><input type= "button" value = "실행" onclick="codeRun(this)"></div>
+				<div><textarea cols="40" rows="5" style="font-size: 20;font-weight: bold;"></textarea><input type= "button" value = "실행" onclick="codeRun(this)"></div>
 			</div>
 		</div>
 	</div>
@@ -463,6 +464,13 @@
 		}
 	}
 	
+	function noneChild() {
+		let newDiv = document.createElement('div');
+		newDiv.className = "none"
+		newDiv.innerText = '하위 페이지 없음';
+		return newDiv;
+	}
+	
 	pageSetting.children[0].addEventListener("click", function(e) { // 페이지 삭제
 		let delno = targetpg.children[0].id;
 		$.ajax({
@@ -474,10 +482,7 @@
 				targetpg.parentElement.removeChild(targetpg);
 				cleanOrder(parent);
 				if(Array.from(parent.children).length == 0 && parent.id != 'page'){
-					let newDiv = document.createElement('div');
-					newDiv.className = "none"
-					newDiv.innerText = '하위 페이지 없음';
-					parent.appendChild(newDiv);
+					parent.appendChild(noneChild());
 				}
 				if(no == now.id){
 					content.removeChild(parentFind(document.getElementById(delno),content));
@@ -553,7 +558,7 @@
 		})
 		
 		pgb.addEventListener("mousedown", function(e1) {
-			let target = this.parentElement; //이거 설명좀
+			let target = this.parentElement; //수정을 할 타켓
 			let newDiv = null;
 			let what = 0;//13이면 위아래 2번은 가운데
 			let last = null;
@@ -569,20 +574,20 @@
 					newDiv.style.left = e.x - e1.x + target.getBoundingClientRect().x;
 				
 				
-				if(e.target == page || !page.contains(e.target))return;
-				if(last != targetpg.parentElement){
-					if(last != null)
-						last.style.backgroundColor = '';
-					last = targetpg;					
-				}
+				if(last != null)
+					last.style.backgroundColor = '';
+				last = targetpg;
+				last = last.parentElement.id != "page" && e.target.id != "border" && !last.contains(e.target) ? last.parentElement.parentElement : last
+						 
 				if(target == last || target.contains(targetpg))return;
 				border.style.display = '';
 				
 				
-				let data = targetpg.getBoundingClientRect();
+				let data = last.getBoundingClientRect();
 				border.style.left = e.x;
 				let parentTop = data.top;
 				let parentBot = data.bottom;
+				
 				
 				if(e.y - parentTop > 8 && -(e.y - parentBot) > 8){
 					what = 2;
@@ -596,7 +601,7 @@
 						what = 1;
 						border.style.top = parentTop +document.body.scrollTop -2;
 					}else{
-						border.style.top = parentBot +document.body.scrollTop;			
+						border.style.top = parentBot +document.body.scrollTop;	
 						what = 3;
 					}
 				}
@@ -610,25 +615,36 @@
 					border.style.display = 'none';
 					border.className = '';
 					
-					
-					if(target != last){
+					if(target != last && !target.contains(last)){
 						let parent = null;
 						let no = target.children[0].id
 						let parentDiv = null;
 						let targetDiv = target.parentElement;
 						
-						if(what == 2){
-							if(leftORbottom(last.children[0].children[0].children[0])){
+						parentDiv = last.children[1]; 
+						switch (what) {//html로 보여야할것
+						case 1:
+							last.insertAdjacentElement('beforebegin' , target);							
+							break;
+						case 2:
+							if(leftORbottom(last.children[0].children[0].children[0])){//접혀있는지 펴져있는지
 								parentDiv = last.children[1];
-								last.children[1].appendChild(target);
+								if(parentDiv.children[0].className == "none"){
+									parentDiv.innerHTML = '';
+								}
+								parentDiv.appendChild(target);
 							}else{
-								targetDiv.removeChild(target);
+								target.parentElement.removeChild(target);
 							}
-						}else{
-							last.insertAdjacentElement(what == 1 ? 'beforebegin':'afterend' , target);							
-							parentDiv = last.parentElement.parentElement.children[1]; 
+							break;
+						case 3:
+							last.insertAdjacentElement('afterend' , target);							
+							break;
 						}
-						if(last.parentElement.id == 'page' && what != 2){// 부모페이지로 놓을때
+						
+						let append = 0;
+						
+						if(what != 2 && target.parentElement.id == 'page'){// 데이터베이스로 수정해야 할것
 							parent = 0;
 						}else{//자식페이지로 들어갈때
 							if(parentDiv != null){
@@ -637,15 +653,20 @@
 									cleanOrder(parentDiv);								
 							}else{
 								parent = last.children[0].id;
-								console.log('어캐할까?');
+								append = 1;
 							}
 						}
-						cleanOrder(targetDiv);
-						$.ajax({
+						
+						cleanOrder(target.parentElement == null ? targetDiv : target.parentElement);
+						if(targetDiv.id != "page" && targetDiv.children.length == 0){
+							targetDiv.appendChild(noneChild())
+						} 
+						console.log(no , parent , append);
+						 $.ajax({
 							url:"updateParent",
-							data:{k:no,kk:parent},
+							data:{k:no,kk:parent,append:append},
 							type:"post"
-						})
+						}) 
 					}
 				}
 				document.removeEventListener("mousemove", pageDragEvent);
@@ -674,10 +695,7 @@
 						let childDiv = document.createElement('div');
 						childDiv.style.paddingLeft = '22px';
 						if(s.length == 0){
-							let newDiv = document.createElement('div');
-							newDiv.className = "none"
-							newDiv.innerText = '하위 페이지 없음';
-							childDiv.appendChild(newDiv);
+							childDiv.appendChild(noneChild());
 						}else{
 							let list = s;
 							list.forEach(l => {
@@ -842,8 +860,7 @@
 			savePage();
 		}
 		if(content.contains(e.target)){
-				
-			if(code == 8){//지우기
+			if(e.code == "Backspace"){//지우기
 				let target = parentFind(nowSelection.anchorNode);
 				let block = false;
 				 
@@ -1119,7 +1136,7 @@
 		})
 		$.ajax({
 			url:"${pageContext.request.contextPath}/codeRuntime",
-			data:{JSONarr:JSON.stringify(arr) ,code : code},
+			data:{JSONarr:(arr.length != 0 ? JSON.stringify(arr) : "") ,code : code},
 			type:"POST",
 			success: function sc(s) {
 				if(s != ""){
@@ -1141,11 +1158,11 @@
 	
 	function cleanOrder(targetParent){
 		let arr = Array.from(targetParent.children);
+		console.log(arr);
 		passArr = [];
 		arr.forEach( d => {
 			passArr.push(d.children[0].id)
 		})
-		console.log(passArr);
 	 	if(passArr.length != 0){
 			$.ajax({
 				url:"updateOrder",

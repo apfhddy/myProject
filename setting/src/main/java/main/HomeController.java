@@ -51,20 +51,20 @@ public class HomeController extends Thread {
 	@RequestMapping("/")
 	public String indexPage(HttpSession session) {
 		session.setAttribute("id",session.getId());
-		return "/WEB-INF/views/login.jsp";
+		return "/WEB-INF/views/login.jsp"; 
 	}
 	
 	
 	@RequestMapping("login")
 	public String home(String id ,String pw,HttpServletRequest req) {
-		if(req.getSession() != null && req.getSession().getAttribute("password") != null && id.equals("wjdgmlfkr") && req.getSession().getAttribute("password").equals(pw)) {
+		//if(req.getSession() != null && req.getSession().getAttribute("password") != null && id.equals("wjdgmlfkr") && req.getSession().getAttribute("password").equals(pw)) {
 			List<Page_DTO> list = page_service.getList(0);
 			req.setAttribute("list", list);
 			req.getSession().setAttribute("login", 1);
 			return "/WEB-INF/views/home.jsp";
-		}else {
-			return "redirect:https://www.google.com/";
-		}
+		//}else {
+		//	return "redirect:https://www.google.com/";
+		//}
 	}
 
 	@RequestMapping(value = "fileupload",produces = "application/text; charset=UTF-8")
@@ -112,7 +112,6 @@ public class HomeController extends Thread {
 		//페이지 준비
 		//websocket 준비
 		echoHandler.getSessionMap(sessoin.getId()).put("page", k);
-		
 		return result;
 	}
 	
@@ -161,8 +160,8 @@ public class HomeController extends Thread {
 	
 	@RequestMapping("updateParent")
 	@ResponseBody
-	public void updateParent(int k,int kk) {//바뀌는 객체 부모객체
-		page_service.updateParent(k,kk);		
+	public void updateParent(int k,int kk,int append) {//바뀌는 객체 부모객체
+		page_service.updateParent(k,kk,append);		
 	}
 	
 	@RequestMapping("Start")
@@ -176,17 +175,18 @@ public class HomeController extends Thread {
 	}
 	
 	
-	@RequestMapping(value = "codeRuntime")
+	@RequestMapping("codeRuntime")
 	@ResponseBody
 	public Map<String,Object> codeRuntime(String JSONarr,String code) {
 		Map<String,Object> map = null;
-			
-		List<String> list =  (List<String>)WhatToWhat.JSONArrayToJAVAList(JSONarr);
 		String request = "";
-		if(!list.isEmpty())
-			for(String variable : list) {
-				request+=variable+"\n";
-			}
+		if(JSONarr != null && !JSONarr.isEmpty()) {
+			List<String> list =  (List<String>)WhatToWhat.JSONArrayToJAVAList(JSONarr);
+			if(!list.isEmpty())
+				for(String variable : list) {
+					request+=variable+"\n";
+				}
+		}
 		request+=code;
 		if(!request.isEmpty())
 			map = codeRuntime.Compile(request);

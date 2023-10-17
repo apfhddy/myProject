@@ -30,10 +30,10 @@
 		    }
 		}
 		
-		$.ajax({
+	/* 	$.ajax({
 			url:"${pageContext.request.contextPath}/Start",
 			type:"POST"
-		})
+		}) */
 	</script>
 </body>
 </html>

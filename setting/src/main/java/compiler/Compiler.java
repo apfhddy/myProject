@@ -60,13 +60,10 @@ public class Compiler {
 			while((buffer = bis.readLine()) != null) {
 				line += buffer+"\n";
 			}
-			if(line.isEmpty())
-				line = null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-		if(line == null) {
-			line = "";
+		if(line.isEmpty()) {
 			BufferedReader bis = new BufferedReader(new InputStreamReader(prs.getErrorStream(),Charset.forName("UTF-8")));
 			try {
 				String buffer = null;
@@ -75,7 +72,7 @@ public class Compiler {
 						buffer = buffer.replace("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compil.java:", "");
 						int lineNum = Integer.parseInt(buffer.charAt(0)+"");
 						buffer = buffer.substring(1);
-						String mesage = "에러라인 :"+(lineNum-2);
+						String mesage = "에러라인 :"+(lineNum-importList.size()-3);
 						buffer  = mesage+buffer;
 						err = true;
 					}
