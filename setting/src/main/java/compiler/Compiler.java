@@ -32,7 +32,7 @@ public class Compiler {
 			args+= ipL+"\n";
 		}
 	
-		args +=	"\npublic class compil {\r\n"
+		args +=	"\npublic class compile {\r\n"
 		+ "    public static void main(String[] args) {\r\n"	
 		+ "        "+code.replaceAll("\\\\\"", "\"")+"\r\n"
 		+ "    }\r\n"
@@ -53,9 +53,10 @@ public class Compiler {
 		
 		Process prs = null;
 		String line = "";
+		BufferedReader bis = null;
 		try {
-			prs = Runtime.getRuntime().exec("java -Dfile.encoding=UTF-8 C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compil.java");
-			BufferedReader bis = new BufferedReader(new InputStreamReader(prs.getInputStream(),Charset.forName("UTF-8")));
+			prs = Runtime.getRuntime().exec("java -Dfile.encoding=UTF-8 C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compile.java");
+			bis = new BufferedReader(new InputStreamReader(prs.getInputStream(),Charset.forName("UTF-8")));
 			String buffer = null;
 			while((buffer = bis.readLine()) != null) {
 				line += buffer+"\n";
@@ -64,12 +65,12 @@ public class Compiler {
 			e.printStackTrace();
 		} 
 		if(line.isEmpty()) {
-			BufferedReader bis = new BufferedReader(new InputStreamReader(prs.getErrorStream(),Charset.forName("UTF-8")));
+			bis = new BufferedReader(new InputStreamReader(prs.getErrorStream(),Charset.forName("UTF-8")));
 			try {
 				String buffer = null;
 				while((buffer = bis.readLine()) != null) {
 					if(buffer.contains("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compil.java:")) {
-						buffer = buffer.replace("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compil.java:", "");
+						buffer = buffer.replace("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compile.java:", "");
 						int lineNum = Integer.parseInt(buffer.charAt(0)+"");
 						buffer = buffer.substring(1);
 						String mesage = "에러라인 :"+(lineNum-importList.size()-3);
