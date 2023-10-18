@@ -123,9 +123,9 @@ public class Page_Service {
 	}
 	
 	
-	public int deletePage(int k) {
+	public void deletePage(int no) {
 		
-		List<Page_DTO> list = page_dao.getList(k);
+		List<Page_DTO> list = page_dao.getList(no);
 		
 		if(list.size() != 0 && list != null) {
 			for(int i = 0; i < list.size(); i++) {
@@ -133,9 +133,7 @@ public class Page_Service {
 			}
 		}
 		
-		page_dao.deletePage(k);
-		
-		return 0;
+		page_dao.deletePage(no);
 	}
 	
 	public void updateOrder(String data) {
