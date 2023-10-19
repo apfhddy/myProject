@@ -77,8 +77,6 @@ pictureEditor.children[0].children[1].addEventListener("mousedown", function(e) 
 	}
 	
 	document.addEventListener("mousemove",pictureEt)
-	
-		
 	document.addEventListener("mouseup",picturedel);
 	
 }) 

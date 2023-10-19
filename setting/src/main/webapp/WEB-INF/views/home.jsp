@@ -384,9 +384,9 @@
 		</div>
 	</div>
 </div>
-<script src="resources/js/content.js?ver=132"></script>
-<script src="resources/js/pictureEditor.js?ver=222113"></script>
-<script src="resources/js/contentEditor.js?ver=21121"></script>
+<script src="resources/js/content.js?ver=1312"></script>
+<script src="resources/js/pictureEditor.js?ver=2221113"></script>
+<script src="resources/js/contentEditor.js?ver=211121"></script>
 <script type="text/javascript">
 	let sock = new SockJS("http://${pageContext.request.serverName }:${pageContext.request.serverPort }${pageContext.request.contextPath }/echo");
 	function sendMessage() {
@@ -559,19 +559,19 @@
 		
 		pgb.addEventListener("mousedown", function(e1) {
 			let target = this.parentElement; //수정을 할 타켓
-			let newDiv = null;
-			let what = 0;//13이면 위아래 2번은 가운데
-			let last = null;
+			let newDiv = null;//드래그 이미지라 생각
+			let what = 0;//1,3이면 위아래 2번은 가운데
+			let last = null;//마지막 타겟
 			function pageDragEvent(e){//마우스 움직이는 이벤트
-				pageE = true;
 				if(newDiv == null){
+					pageE = true;
 					newDiv = dragClone(target)
 					document.body.appendChild(newDiv);
 					border.className = "page";
 					newDiv.style.width = "16%";
 				}
-					newDiv.style.top = e.y - e1.y + target.getBoundingClientRect().y + document.body.scrollTop;
-					newDiv.style.left = e.x - e1.x + target.getBoundingClientRect().x;
+				newDiv.style.top = e.y - e1.y + target.getBoundingClientRect().y + document.body.scrollTop;
+				newDiv.style.left = e.x - e1.x + target.getBoundingClientRect().x;
 				
 				
 				if(last != null)
@@ -588,14 +588,15 @@
 				let parentTop = data.top;
 				let parentBot = data.bottom;
 				
-				
-				if(e.y - parentTop > 8 && -(e.y - parentBot) > 8){
+				let top = e.y - parentTop;
+				let bottom = -(e.y - parentBot);
+				if( top > 8 && bottom > 8){
 					what = 2;
 					border.style.display = 'none';
 					last.style.backgroundColor = '#DDEAF7';
 				}else{
 					last.style.backgroundColor = '';
-					borderWhat = e.y - parentTop   < -(e.y - parentBot);
+					borderWhat = top   < bottom;
 					border.style.left = data.x;
 					if(borderWhat){
 						what = 1;
@@ -1155,7 +1156,7 @@
 	
 	function cleanOrder(targetParent){
 		let arr = Array.from(targetParent.children);
-		console.log(arr);
+		//console.log(arr);
 		passArr = [];
 		arr.forEach( d => {
 			passArr.push(d.children[0].id)

@@ -3,19 +3,13 @@ let nowSelection = window.getSelection();
 
 
 content.addEventListener('mousedown',function(e){
-	let pointer = e;
 	
 	function contentEt(e){
 		setTimeout(function() {
 	        if(nowSelection.toString().length != 0){
 	        	if(editor.style.display == "none"){
 			        const range = nowSelection.getRangeAt(0); // 선택된 텍스트 범위 가져오기
-			        const startNode = range.startContainer; // 선택된 텍스트의 시작 노드
-			        const endNode = range.endContainer; // 선택된 텍스트의 끝 노드
-			        const startOffset = range.startOffset; // 시작 노드에서의 시작 오프셋
-			        const endOffset = range.endOffset; // 끝 노드에서의 끝 오프셋
-			        
-			        // 시작 위치와 끝 위치의 좌표 구하기
+			       
 			        const startRect = range.getClientRects()[0]; // 선택된 텍스트의 첫 번째 사각 영역
 			        const endRect = range.getClientRects()[range.getClientRects().length - 1]; // 선택된 텍스트의 마지막 사각 영역
 			
@@ -27,22 +21,22 @@ content.addEventListener('mousedown',function(e){
 					let what = startY < endY;
 					
 					let y = what ? startY : endY;
-					let x = what ? startX : startY;
+					let x = what ? startX : endX;
 					
-			        const mouseX = x +200;
-			        const mouseY = y+document.body.scrollTop - 30 ;
-			        editor.style.left = mouseX+'px';
-			        editor.style.top = mouseY+ 'px'; // y구하기
+			        const editorX = x +200;
+			        const editorY = y+document.body.scrollTop - 30 ;
+			        editor.style.left = editorX+'px';
+			        editor.style.top = editorY+ 'px'; // y구하기
 					editor.style.display = "flex";
 	        	}
 	        }else{
-	        	if(!editor.contains(e.target)){
+	        	if(editor.style.display != "none" && !editor.contains(e.target)){
 			        editor.style.display = "none";
 			        document.removeEventListener('mouseup', contentEt);  
 	        	}
 	        }
 		})
-	}
+	}S
 	
 	document.addEventListener('mouseup', contentEt);
 })
