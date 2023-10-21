@@ -47,27 +47,26 @@ pictureSetting.children[1].addEventListener("click",(e) => {
 
 
 pictureEditor.children[0].children[1].addEventListener("mousedown", function(e) {
-	picttf = true;	
-	let wd =  targetIg.getBoundingClientRect().width;
-    let etex = e.x;
+	picttf = true; //전역 변수 드래그중인 체크하는 변수
+	let width =  targetIg.getBoundingClientRect().width;
+    let lastX = e.x;
 	
 	
 	function pictureEt(e){
 		e.preventDefault();
-		let myx = e.x;
-		let tf = myx > etex;
-		let test = tf ? wd+3 : wd-3;
-		etex = myx;
+		let myX = e.x;
+		let tf = myX > lastX;
+		let testWidth = tf ? width+3 : width-3;
+		lastX = myX;
 		let img = targetIg.getBoundingClientRect();
 		
-		if(img.height < 60 && test < wd || img.width > 983 && test > wd)return;
-			targetIg.style.width = wd+'px';
-			img = targetIg.getBoundingClientRect();
+		if(img.height < 60 && testWidth < width || img.width > 983 && testWidth > width)return;
+			width = testWidth;
+			targetIg.style.width = width+'px';
 			pictureEditor.style.left = img.x;
 			pictureEditor.style.top = img.y+document.body.scrollTop;
 			pictureEditor.style.height  = img.height;
 			pictureEditor.style.width = img.width;
-			wd = test;
 	}
 	
 	function picturedel(e){

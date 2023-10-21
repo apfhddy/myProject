@@ -385,8 +385,8 @@
 	</div>
 </div>
 <script src="resources/js/content.js?ver=1312"></script>
-<script src="resources/js/pictureEditor.js?ver=2221113"></script>
-<script src="resources/js/contentEditor.js?ver=211121"></script>
+<script src="resources/js/pictureEditor.js?ver=221113"></script>
+<script src="resources/js/contentEditor.js?ver=21121"></script>
 <script type="text/javascript">
 	let sock = new SockJS("http://${pageContext.request.serverName }:${pageContext.request.serverPort }${pageContext.request.contextPath }/echo");
 	function sendMessage() {
