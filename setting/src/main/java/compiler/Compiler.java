@@ -64,6 +64,7 @@ public class Compiler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
+
 		if(line.isEmpty()) {
 			bis = new BufferedReader(new InputStreamReader(prs.getErrorStream(),Charset.forName("UTF-8")));
 			try {

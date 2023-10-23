@@ -577,9 +577,11 @@
 				if(last != null)
 					last.style.backgroundColor = '';
 				last = targetpg;
-				last = last.parentElement.id != "page" && e.target.id != "border" && !last.contains(e.target) ? last.parentElement.parentElement : last
 							 
-				if(target == last)return;
+				if(target == last){
+					border.style.display = 'NONE';					
+					return;
+				}
 				border.style.display = '';
 				
 				
@@ -615,11 +617,13 @@
 					last.style.backgroundColor = '';
 					border.style.display = 'none';
 					border.className = '';
+					
+					
+					
 					if(target != last){
 						let no = target.children[0].id
 						let parentDiv = last.parentElement.parentElement.parentElement;
 						let targetDiv = target.parentElement;
-						parentDiv = last.children[1]; 
 						
 						switch (what) {//html로 보여야할것
 						case 1:
@@ -641,12 +645,12 @@
 							break;
 						}
 						
-						let append = 0;
 						
-						/* if(what != 2 && target.parentElement.id == 'page'){// 데이터베이스로 수정해야 할것
+						let append = 0;
+						if(what != 2 && target.parentElement.id == 'page'){// 데이터베이스로 수정해야 할것
 							parent = 0;
 						}else{//자식페이지로 들어갈때
-							if(parentDiv != null){
+							if(parentDiv != null && parentDiv.id != "side-box"){
 								if(parentDiv != targetDiv)
 									cleanOrder(parentDiv);								
 							}else{
@@ -654,7 +658,8 @@
 								append = 1;
 							}
 						}
-						cleanOrder(target.parentElement == null ? targetDiv : target.parentElement);
+						
+						//setTimeout(cleanOrder((target.parentElement == null ? targetDiv : target.parentElement)),100);
 						if(targetDiv.id != "page" && targetDiv.children.length == 0){
 							targetDiv.appendChild(noneChild())
 						} 
@@ -662,7 +667,7 @@
 							url:"updateParent",
 							data:{k:no,kk:parent,append:append},
 							type:"post"	
-						})  */
+						})   
 					}
 				}
 				document.removeEventListener("mousemove", pageDragEvent);
@@ -1147,11 +1152,10 @@
 		}) 
 	}
 	
-	
-	
 	function cleanOrder(targetParent){
+		console.log(targetParent.children)
 		let arr = Array.from(targetParent.children);
-		//console.log(arr);
+		
 		passArr = [];
 		arr.forEach( d => {
 			passArr.push(d.children[0].id)
@@ -1161,7 +1165,7 @@
 				url:"updateOrder",
 				data:{data:JSON.stringify(passArr)},
 				type:"post"
-			})
+			}) 
 		} 
 	}
 	
