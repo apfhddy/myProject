@@ -22,7 +22,7 @@ public class Compiler {
 	
 	
 	public Map<String,Object> Compile(String code) {
-		File compiler = new File("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compil.java");
+		File compiler = new File("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compile.java");
 		FileOutputStream fos = null;
 		boolean err = false;
 		Map<String,Object> map = new HashMap<String, Object>();
@@ -69,7 +69,7 @@ public class Compiler {
 			try {
 				String buffer = null;
 				while((buffer = bis.readLine()) != null) {
-					if(buffer.contains("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compil.java:")) {
+					if(buffer.contains("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compile.java:")) {
 						buffer = buffer.replace("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compile.java:", "");
 						int lineNum = Integer.parseInt(buffer.charAt(0)+"");
 						buffer = buffer.substring(1);

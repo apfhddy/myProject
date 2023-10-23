@@ -209,7 +209,7 @@
 		z-index: 1;
 	}
 	.content{
-		margin-left: 6.2%; 
+			
 		width: 63.5%; 
 	}
 	.page{
@@ -218,9 +218,10 @@
 	#content{
 		outline: 0;
 		margin-bottom: 10%;
+		margin-left: 4%;
 	}
 	#content > div{
-		padding-left: 9%;
+		margin-left: 5%;
 		margin-top: 2px;
 		margin-bottom: 2px;
 	}
@@ -379,14 +380,14 @@
 			</div>	 -->
 			<div><br></div>
 			<div>
-				<div><textarea cols="40" rows="5" style="font-size: 20;font-weight: bold;"></textarea><input type= "button" value = "실행" onclick="codeRun(this)"></div>
+				<div><textarea id = "cs"cols="40" rows="5" style="font-size: 20;font-weight: bold;"></textarea><input type= "button" value = "실행" onclick="codeRun(this)"></div>
 			</div>
 		</div>
 	</div>
 </div>
-<script src="resources/js/content.js?ver=1312"></script>
-<script src="resources/js/pictureEditor.js?ver=221113"></script>
-<script src="resources/js/contentEditor.js?ver=21121"></script>
+<script src="resources/js/content.js?ver=1312222"></script>
+<script src="resources/js/pictureEditor.js?ver=22221213"></script>
+<script src="resources/js/contentEditor.js?ver=2112221"></script>
 <script type="text/javascript">
 	let sock = new SockJS("http://${pageContext.request.serverName }:${pageContext.request.serverPort }${pageContext.request.contextPath }/echo");
 	function sendMessage() {
@@ -573,13 +574,12 @@
 				newDiv.style.top = e.y - e1.y + target.getBoundingClientRect().y + document.body.scrollTop;
 				newDiv.style.left = e.x - e1.x + target.getBoundingClientRect().x;
 				
-				
 				if(last != null)
 					last.style.backgroundColor = '';
 				last = targetpg;
 				last = last.parentElement.id != "page" && e.target.id != "border" && !last.contains(e.target) ? last.parentElement.parentElement : last
-						 
-				if(target == last || target.contains(targetpg))return;
+							 
+				if(target == last)return;
 				border.style.display = '';
 				
 				
@@ -615,14 +615,12 @@
 					last.style.backgroundColor = '';
 					border.style.display = 'none';
 					border.className = '';
-					
-					if(target != last && !target.contains(last)){
-						let parent = null;
+					if(target != last){
 						let no = target.children[0].id
-						let parentDiv = null;
+						let parentDiv = last.parentElement.parentElement.parentElement;
 						let targetDiv = target.parentElement;
-						
 						parentDiv = last.children[1]; 
+						
 						switch (what) {//html로 보여야할것
 						case 1:
 							last.insertAdjacentElement('beforebegin' , target);							
@@ -645,11 +643,10 @@
 						
 						let append = 0;
 						
-						if(what != 2 && target.parentElement.id == 'page'){// 데이터베이스로 수정해야 할것
+						/* if(what != 2 && target.parentElement.id == 'page'){// 데이터베이스로 수정해야 할것
 							parent = 0;
 						}else{//자식페이지로 들어갈때
 							if(parentDiv != null){
-								parent = parentDiv.parentElement.children[0].id;
 								if(parentDiv != targetDiv)
 									cleanOrder(parentDiv);								
 							}else{
@@ -657,17 +654,15 @@
 								append = 1;
 							}
 						}
-						
 						cleanOrder(target.parentElement == null ? targetDiv : target.parentElement);
 						if(targetDiv.id != "page" && targetDiv.children.length == 0){
 							targetDiv.appendChild(noneChild())
 						} 
-						console.log(no , parent , append);
 						 $.ajax({
 							url:"updateParent",
 							data:{k:no,kk:parent,append:append},
-							type:"post"
-						}) 
+							type:"post"	
+						})  */
 					}
 				}
 				document.removeEventListener("mousemove", pageDragEvent);

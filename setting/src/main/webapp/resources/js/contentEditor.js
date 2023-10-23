@@ -36,7 +36,7 @@ content.addEventListener('mousedown',function(e){
 	        	}
 	        }
 		})
-	}S
+	}
 	
 	document.addEventListener('mouseup', contentEt);
 })
