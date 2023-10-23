@@ -155,7 +155,6 @@ public class HomeController extends Thread {
 	@RequestMapping("updateOrder")
 	@ResponseBody
 	public void updateOrder(String data) {
-		System.out.println("?");
 		page_service.updateOrder(data);
 	}
 	

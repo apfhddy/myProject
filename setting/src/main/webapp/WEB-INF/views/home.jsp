@@ -621,21 +621,24 @@
 					
 					
 					if(target != last){
-						let no = target.children[0].id
-						let parentDiv = last.parentElement.parentElement.parentElement;
-						let targetDiv = target.parentElement;
+						let no = target.children[0].id // 이동시키는 no
+						let lastDiv = last.parentElement.parentElement; //마지막타겟의 div
+						let targetDiv = target.parentElement;// 이동시켰던애의 전의 div
+						let append = 0;//단순 어펜드인지
+						let parnet;
+						
 						
 						switch (what) {//html로 보여야할것
 						case 1:
 							last.insertAdjacentElement('beforebegin' , target);							
 							break;
 						case 2:
+							lastDiv = last;
 							if(leftORbottom(last.children[0].children[0].children[0])){//접혀있는지 펴져있는지
-								parentDiv = last.children[1];
-								if(parentDiv.children[0].className == "none"){
-									parentDiv.innerHTML = '';
+								if(lastDiv.children[1].children[0].className == "none"){
+									lastDiv.children[1].innerHTML = '';
 								}
-								parentDiv.appendChild(target);
+								lastDiv.children[1].appendChild(target);
 							}else{
 								target.parentElement.removeChild(target);
 							}
@@ -645,29 +648,37 @@
 							break;
 						}
 						
-						
-						let append = 0;
 						if(what != 2 && target.parentElement.id == 'page'){// 데이터베이스로 수정해야 할것
 							parent = 0;
-						}else{//자식페이지로 들어갈때
-							if(parentDiv != null && parentDiv.id != "side-box"){
-								if(parentDiv != targetDiv)
-									cleanOrder(parentDiv);								
+						}else{//자식페이지로 들어갈때 
+							parent = lastDiv.children[0].id;
+							if(lastDiv.children[1] != null && lastDiv.id != "side-box"){
 							}else{
-								parent = last.children[0].id;
 								append = 1;
 							}
 						}
 						
-						//setTimeout(cleanOrder((target.parentElement == null ? targetDiv : target.parentElement)),100);
+						console.log(parent)						
+						
+						
+						if(append != 1 && lastDiv.children[1].id == "pgps"){
+							lastDiv = page;
+						}else{
+							lastDiv = lastDiv.children[1];
+						}
+						if(append != 1 && targetDiv != lastDiv){
+							cleanOrder(lastDiv);
+						}
+						cleanOrder(targetDiv);
+						
 						if(targetDiv.id != "page" && targetDiv.children.length == 0){
 							targetDiv.appendChild(noneChild())
-						} 
-						 $.ajax({
-							url:"updateParent",
+						}
+						$.ajax({
+							url:"${pageContext.request.contextPath}/updateParent",
 							data:{k:no,kk:parent,append:append},
-							type:"post"	
-						})   
+							type:"POST"
+						})
 					}
 				}
 				document.removeEventListener("mousemove", pageDragEvent);
