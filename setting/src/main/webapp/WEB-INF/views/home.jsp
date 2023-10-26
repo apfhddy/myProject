@@ -135,6 +135,7 @@
 	}
 	#side-box > .side-pages{
 		margin-top: 10px;
+		margin-bottom: 10px;
 		color: gray;
 		padding-left: 10px;
 		padding-right: 10px;
@@ -359,6 +360,9 @@
 		</c:if>
 	</div>
 		<div id = "pgps" class="pagesCd"><div><img width="10" class="pageimg" src = "resources/tag/pluss.png"><div style="margin-left: 2%;">페이지 추가</div></div></div>
+	</div>
+	<div>
+		휴지통
 	</div>
 </div> 
 <div id = "main">
