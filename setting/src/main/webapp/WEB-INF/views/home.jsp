@@ -1273,8 +1273,10 @@
 	//처음 접속하면 바로 상위 메모장 여는 명령어
 	//if(page.children[0] != null)
 		//page.children[0].children[0].children[0].children[2].click();   
-  	
-	
+	history.pushState(null, null, location.href); 
+	window.onpopstate = function() {
+		history.go(1); 
+	}
 </script> 
 </body>
 </body>
