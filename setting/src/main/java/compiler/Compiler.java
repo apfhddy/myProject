@@ -56,33 +56,32 @@ public class Compiler {
 		BufferedReader bis = null;
 		try {
 			prs = Runtime.getRuntime().exec("java -Dfile.encoding=UTF-8 C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compile.java");
-			bis = new BufferedReader(new InputStreamReader(prs.getInputStream(),Charset.forName("UTF-8")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+		
+		try {
+			prs.waitFor();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		int stat = (prs.exitValue());
+		bis = new BufferedReader(new InputStreamReader(stat == 0 ? prs.getInputStream() : prs.getErrorStream(),Charset.forName("UTF-8")));
+		try {
 			String buffer = null;
 			while((buffer = bis.readLine()) != null) {
+				if(stat == 1 && buffer.contains("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compile.java:")) {
+					buffer = buffer.replace("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compile.java:", "");
+					int lineNum = Integer.parseInt(buffer.charAt(0)+"");
+					buffer = buffer.substring(1);
+					String mesage = "에러라인 :"+(lineNum-importList.size()-3);
+					buffer  = mesage+buffer;
+				}
 				line += buffer+"\n";
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
-
-		if(line.isEmpty()) {
-			bis = new BufferedReader(new InputStreamReader(prs.getErrorStream(),Charset.forName("UTF-8")));
-			try {
-				String buffer = null;
-				while((buffer = bis.readLine()) != null) {
-					if(buffer.contains("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compile.java:")) {
-						buffer = buffer.replace("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compile.java:", "");
-						int lineNum = Integer.parseInt(buffer.charAt(0)+"");
-						buffer = buffer.substring(1);
-						String mesage = "에러라인 :"+(lineNum-importList.size()-3);
-						buffer  = mesage+buffer;
-						err = true;
-					}
-					line += buffer+"\n";
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		line = line.replaceAll("\n", "<br>");
 		line = line.replaceAll(" ", "&nbsp;");
