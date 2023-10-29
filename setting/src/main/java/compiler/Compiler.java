@@ -83,6 +83,8 @@ public class Compiler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		
 		line = line.replaceAll("\n", "<br>");
 		line = line.replaceAll(" ", "&nbsp;");
 		map.put("content", line);
