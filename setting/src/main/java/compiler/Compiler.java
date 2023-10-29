@@ -67,6 +67,7 @@ public class Compiler {
 		}
 		
 		int stat = (prs.exitValue());
+		err = stat == 1;
 		bis = new BufferedReader(new InputStreamReader(stat == 0 ? prs.getInputStream() : prs.getErrorStream(),Charset.forName("UTF-8")));
 		try {
 			String buffer = null;
