@@ -256,8 +256,18 @@
 		-webkit-user-select: none;
 		user-select: none;
  	}
+ 	#tresh-part > span{
+ 		padding-left: 6px;
+ 		padding-right: 6px;
+ 		padding-top: 2px;
+ 		padding-bottom: 8px;
+ 		border-radius: 4px;
+ 	}
+ 	#tresh-part > span:hover{ 
+ 		background-color: #EFEFEF;
+ 	}
 </style>
-	<title>Home</title>
+	<title>Home</title> 
 </head>
 <body>
 <!-- 에디터 및 설정 박스 -->
@@ -299,9 +309,19 @@
 </div> 
 <!-- popup -->
 <div style="z-index: 99; height: 100%; width: 100%;  position: absolute;">
-	<div style="position:absolute; bottom: 0; margin-left: 17%; margin-bottom: 8px; height: 460; width: 23%; border-radius: 6px; background-color: blue">
-		<div>
-			
+	<div id = "tresh" style="position:absolute; bottom: 0; margin-left: 17%; margin-bottom: 8px; height: 460; width: 23%; border-radius: 6px; background-color: blue">
+		<div id = "tresh-header" style="margin-top: 7px; margin-left: 7px;">
+			<div id = "tresh-part" >
+				<span>모든 페이지</span>
+				<span>현재 페이지</span>
+				<span>내가 최종 편집</span>
+			</div>
+			<div id = "tresh-select">
+				<img  src="resources/tag/select.png" width="17px"> 
+			</div>
+		</div>
+		<div id = "tresh-fotter">
+		
 		</div>
 	</div> 
 </div>
