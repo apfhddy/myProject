@@ -299,7 +299,11 @@
 </div> 
 <!-- popup -->
 <div style="z-index: 99; height: 100%; width: 100%;  position: absolute;">
-	<div style="position:absolute; bottom: 0; margin-left: 17%; margin-bottom: 8px; height: 460; width: 23%; border-radius: 6px; background-color: blue">휴지통 위치</div> 
+	<div style="position:absolute; bottom: 0; margin-left: 17%; margin-bottom: 8px; height: 460; width: 23%; border-radius: 6px; background-color: blue">
+		<div>
+			
+		</div>
+	</div> 
 </div>
 <div id = "main">
 	<div class = "header">

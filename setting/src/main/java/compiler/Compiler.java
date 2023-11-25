@@ -72,7 +72,7 @@ public class Compiler {
 		try {
 			String buffer = null;
 			while((buffer = bis.readLine()) != null) {
-				if(stat == 1 && buffer.contains("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compile.java:")) {
+				if(err && buffer.contains("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compile.java:")) {
 					buffer = buffer.replace("C:\\Users\\vavog\\Desktop\\serverFile\\compiler\\compile.java:", "");
 					int lineNum = Integer.parseInt(buffer.charAt(0)+"");
 					buffer = buffer.substring(1);
@@ -91,6 +91,6 @@ public class Compiler {
 		map.put("content", line);
 		map.put("err", err);
 		
-		return map;
+		return map;	
 	}
 }
